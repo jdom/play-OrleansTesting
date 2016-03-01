@@ -1,13 +1,17 @@
 ﻿using System.Threading.Tasks;
 using GrainInterfaces;
+using Orleans;
 
 namespace GrainCollection
 {
-    class HelloGrain : Orleans.Grain, IHello
+    class HelloGrain : Grain, IHello
     {
-        public Task<string> SayHello(string msg)
+        public async Task<string> SayHello(string msg)
         {
-            return Task.FromResult(string.Format("You said: {0}, I say: Hello!", msg));
+            var id = this.GetPrimaryKeyLong();
+            var foo = GrainFactory.GetGrain<IFoo>(id);
+            await foo.SomeoneSaidHello();
+            return string.Format("You said: {0}, I say: Hello!", msg);
         }
     }
 }
