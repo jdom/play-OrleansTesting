@@ -95,7 +95,9 @@
   </Choose>
   <ItemGroup>
     <Compile Include="HelloWorldSiloTests.cs" />
+    <Compile Include="HelloWorldSiloTestsStartup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stubs\StubFooGrain.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

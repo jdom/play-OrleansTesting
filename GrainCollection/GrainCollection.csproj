@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FooGrain.cs" />
+    <Compile Include="GrainUtilities.cs" />
     <Compile Include="HelloGrain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

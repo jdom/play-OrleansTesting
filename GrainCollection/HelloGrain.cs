@@ -9,7 +9,7 @@ namespace GrainCollection
         public async Task<string> SayHello(string msg)
         {
             var id = this.GetPrimaryKeyLong();
-            var foo = GrainFactory.GetGrain<IFoo>(id);
+            var foo = GrainFactory.GetGrain<IFoo>(id, GrainUtilities.GrainResolutionPrefix);
             await foo.SomeoneSaidHello();
             return string.Format("You said: {0}, I say: Hello!", msg);
         }

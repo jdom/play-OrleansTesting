@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GrainInterfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orleans.TestingHost;
+using Tests.Stubs;
 
 namespace Tests
 {
@@ -29,6 +30,10 @@ namespace Tests
                     new TestingSiloOptions
                     {
                         StartSecondary = false,
+                        AdjustConfig = clusterConfig =>
+                        {
+                            clusterConfig.Globals.RegisterBootstrapProvider<HelloWorldSiloTestsStartup>("HelloWorldSiloTests");
+                        }
                     });
             }
         }
@@ -54,6 +59,21 @@ namespace Tests
             Assert.IsNotNull(reply, "Grain replied with some message");
             string expected = string.Format("You said: {0}, I say: Hello!", greeting);
             Assert.AreEqual(expected, reply, "Grain replied with expected message");
+        }
+
+        [TestMethod]
+        public async Task WhenSayingHelloShouldCallFoo()
+        {
+            long id = GetRandomGrainId();
+            IHello grain = host.GrainFactory.GetGrain<IHello>(id);
+            var stubFoo = host.GrainFactory.GetGrain<IStubFoo>(id);
+            Assert.AreEqual(0, await stubFoo.GetSomeoneSaidHelloCallCount());
+
+            await grain.SayHello("hello 1");
+            Assert.AreEqual(1, await stubFoo.GetSomeoneSaidHelloCallCount());
+
+            await grain.SayHello("hello 2");
+            Assert.AreEqual(2, await stubFoo.GetSomeoneSaidHelloCallCount());
         }
     }
 }
