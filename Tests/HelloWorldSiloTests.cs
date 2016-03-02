@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GrainCollection;
 using GrainInterfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orleans.TestingHost;
@@ -74,6 +75,22 @@ namespace Tests
 
             await grain.SayHello("hello 2");
             Assert.AreEqual(2, await stubFoo.GetSomeoneSaidHelloCallCount());
+        }
+
+        [TestMethod]
+        public async Task WIP()
+        {
+            // could talk to Silo appdomain like this
+            host.Primary.AppDomain.DoCallBack(DoSomethingInSilo);
+
+            // could instead show exception handling in grain calls by making IFoo throw
+
+            // could use DI also
+        }
+
+        public static void DoSomethingInSilo()
+        {
+            GrainUtilities.GrainResolutionPrefix = "SomethingElse";
         }
     }
 }
